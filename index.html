@@ -356,6 +356,7 @@
 
     /* Continent button - full width tap target */
     .continent-link { display: flex; justify-content: center; width: 100%; padding: 11px 16px; font-size: 0.88rem; }
+    .card-section[style*='flex'] { flex-direction: column; }
 
     /* Footer */
     .lookup-footer { margin-top: 28px; }
@@ -477,6 +478,15 @@ function renderResult(country) {
     ? `<a href="${escAttr(country.continentUrl)}" class="continent-link" target="_blank">🌐 View Massage in ${esc(contLabel)} →</a>`
     : '';
 
+  // US-specific extra links
+  const isUS = country.country === 'United States';
+  const usLicensingBtn = isUS
+    ? `<a href="https://www.pinpointeducation.com/massage-therapist-licensing-requirements-us" class="continent-link" target="_blank">🪪 US Licensing Requirements →</a>`
+    : '';
+  const usCEBtn = isUS
+    ? `<a href="https://www.pinpointeducation.com/massage-therapy-continuing-education-requirements-us" class="continent-link" target="_blank">☑️ US Renewal &amp; CE Requirements →</a>`
+    : '';
+
   const card = document.getElementById('resultCard');
   card.className = 'result-card visible';
   card.innerHTML = `
@@ -513,7 +523,7 @@ function renderResult(country) {
           <div class="card-section-content">${esc(country.culturalPerceptions || '—')}</div>
         </div>
       </div>
-      ${continentBtn ? `<div class="card-section">${continentBtn}</div>` : ''}
+      ${(continentBtn || usLicensingBtn || usCEBtn) ? `<div class="card-section" style="display:flex;flex-wrap:wrap;gap:10px;">${usLicensingBtn}${usCEBtn}${continentBtn}</div>` : ''}
     </div>
   `;
   sendResize();
